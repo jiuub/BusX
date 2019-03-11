@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.xaau.bs.busx.AccountCenterActivity">
+
+    <item
+        android:id="@+id/action_signOut"
+        android:title="@string/sign_out"
+        android:orderInCategory="80"
+        app:showAsAction="always"/>
+</menu>

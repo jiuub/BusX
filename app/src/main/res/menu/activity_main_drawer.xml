@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_stop"
+            android:icon="@android:drawable/ic_search_category_default"
+            android:title="站点" />
+        <item
+            android:id="@+id/nav_line"
+            android:icon="@drawable/ic_menu_send"
+            android:title="线路" />
+        <item
+            android:id="@+id/nav_route"
+            android:icon="@android:drawable/ic_dialog_map"
+            android:title="导航" />
+    </group>
+
+    <item android:title="更多">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@android:drawable/ic_dialog_info"
+                android:title="关于" />
+        </menu>
+    </item>
+
+</menu>
