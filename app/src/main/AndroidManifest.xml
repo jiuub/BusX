@@ -59,7 +59,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="0107b26483dd07ccdba8b8a19649e078" />
+            android:value="高德key" />
 
         <service android:name="com.amap.api.location.APSService" />
 

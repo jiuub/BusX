@@ -173,16 +173,13 @@ public class MainActivity extends AppCompatActivity
             startActivity(Intent.createChooser(sendIntent, "分享BusX"));
         }else if (id == R.id.byAlipay) {
             if (AlipayUtil.hasInstalledAlipayClient(this)){
-                AlipayUtil.startAlipayClient(this,"FKX00754UX82INS66PCA13");
+                AlipayUtil.startAlipayClient(this,"   ");
             }else{
                 Toast.makeText(this, "检测到未安装支付宝，无法打赏", Toast.LENGTH_SHORT).show();
             }
         }else if (id == R.id.byPayPal) {
             WebView webView = new WebView(this);
-            webView.loadUrl("https://paypal.me/zcp0");
-//            Intent intent = new Intent(Intent.ACTION_VIEW);    //为Intent设置Action属性
-//            intent.setData(Uri.parse("https://paypal.me/zcp0")); //为Intent设置DATA属性
-//            startActivity(intent);
+            webView.loadUrl("   ");
         }
 
         return super.onOptionsItemSelected(item);
