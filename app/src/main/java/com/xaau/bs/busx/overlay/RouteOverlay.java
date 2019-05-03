@@ -131,8 +131,9 @@ public class RouteOverlay {
 	 */
 	public void zoomToSpan() {
 		if (startPoint != null) {
-			if (mAMap == null)
+			if (mAMap == null) {
 				return;
+			}
 			try {
 				LatLngBounds bounds = getLatLngBounds();
 				mAMap.animateCamera(CameraUpdateFactory

@@ -16,13 +16,9 @@ public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.ViewHold
     private ArrayList<Dessert> items;
 
     public DessertAdapter(){
-        items = new ArrayList<>();
-        String[] names = {"C", "D", "E", "F", "G", "H", "I"};
-        String desc = "欢迎使用busX";
-        for(int i = 0; i < names.length; i++){
-            Dessert item = new Dessert(names[i].charAt(0), names[i], desc);
-            items.add(item);
-        }
+        items = new ArrayList<Dessert>();
+        Dessert item = new Dessert("⚠".charAt(0), "Welcome", "欢迎使用busX");
+        items.add(item);
     }
 
     public DessertAdapter(ArrayList<Dessert> items){

@@ -17,8 +17,8 @@ public class HttpUtils {
     private static URL jsonUrl , loginUrl;
     static{
         try {
-            jsonUrl=new URL("http://192.168.123.201:8080/BusX_server_war_exploded/servlet/JsonServlet");
-            loginUrl=new URL("http://192.168.123.201:8080/BusX_server_war_exploded/servlet/LoginServlet");
+            jsonUrl=new URL("http://192.168.43.123:8080/BusX_server_war_exploded/servlet/JsonServlet");
+            loginUrl=new URL("http://192.168.43.123:8080/BusX_server_war_exploded/servlet/LoginServlet");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

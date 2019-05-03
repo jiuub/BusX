@@ -1,16 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".RouteActivity">
 
     <com.amap.api.maps.MapView
         android:id="@+id/route_map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <include layout="@layout/route_bar" />
+    </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+            <AutoCompleteTextView
+                android:id="@+id/text_dept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/shape_circle_while_bg"
+                android:completionThreshold="1"
+                android:dropDownVerticalOffset="1.0dip"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:hint="我的位置"
+                android:imeOptions="actionDone"
+                android:inputType="text|textAutoComplete"
+                android:maxLength="30"
+                android:padding="@dimen/offset_title"
+                android:singleLine="true"
+                android:textColor="@color/grey6"
+                android:textColorHint="@color/grey9"
+                android:textSize="@dimen/title_text_size"
+                tools:ignore="InefficientWeight" />
+            <AutoCompleteTextView
+                android:id="@+id/text_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/shape_circle_while_bg"
+                android:completionThreshold="1"
+                android:dropDownVerticalOffset="1.0dip"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:hint="你要去哪儿?"
+                android:imeOptions="actionDone"
+                android:inputType="text|textAutoComplete"
+                android:maxLength="30"
+                android:padding="@dimen/offset_title"
+                android:singleLine="true"
+                android:textColor="@color/grey6"
+                android:textColorHint="@color/grey9"
+                android:textSize="@dimen/title_text_size" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+            <Button
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/shape_circle_while_bg"
+                android:text="确定"
+                android:textStyle="bold"
+                android:padding="@dimen/offset_title"
+                android:onClick="onDriveClick"
+                android:gravity="center"
+                tools:ignore="InefficientWeight" />
+            <Button
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/shape_circle_while_bg"
+                android:text="重置"
+                android:textStyle="bold"
+                android:padding="@dimen/offset_title"
+                android:onClick="onResetClick"
+                android:gravity="center"
+                tools:ignore="InefficientWeight" />
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/bus_result"
@@ -34,4 +126,4 @@
         </ListView>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

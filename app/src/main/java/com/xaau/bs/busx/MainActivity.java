@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,19 +23,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.xaau.bs.busx.adapter.DessertAdapter;
+import com.xaau.bs.busx.util.AlipayUtil;
 import com.xaau.bs.busx.util.SharedPreferenceUtil;
-
+import com.zaaach.citypicker.CityPicker;
+import com.zaaach.citypicker.adapter.OnPickListener;
+import com.zaaach.citypicker.model.City;
+import com.zaaach.citypicker.model.LocateState;
+import com.zaaach.citypicker.model.LocatedCity;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private AMapLocationClient aMapLocationClient;
+    private TextView currentTV;
     //tool按钮
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkPermissions();
+        SharedPreferenceUtil.saveCity(MainActivity.this,"西安");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //login按钮点击
@@ -41,9 +59,6 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-
                 if (SharedPreferenceUtil.getIsLogin(MainActivity.this)){
                     Intent intent=new Intent(MainActivity.this,AccountCenterActivity.class);
                     startActivity(intent);
@@ -76,7 +91,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onStart() {
-        checkPermissions();
         super.onStart();
     }
 
@@ -152,8 +166,23 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_share) {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.setType("text/plain");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "使用BusX即可快速查询公交!https://...");
+            startActivity(Intent.createChooser(sendIntent, "分享BusX"));
+        }else if (id == R.id.byAlipay) {
+            if (AlipayUtil.hasInstalledAlipayClient(this)){
+                AlipayUtil.startAlipayClient(this,"FKX00754UX82INS66PCA13");
+            }else{
+                Toast.makeText(this, "检测到未安装支付宝，无法打赏", Toast.LENGTH_SHORT).show();
+            }
+        }else if (id == R.id.byPayPal) {
+            WebView webView = new WebView(this);
+            webView.loadUrl("https://paypal.me/zcp0");
+//            Intent intent = new Intent(Intent.ACTION_VIEW);    //为Intent设置Action属性
+//            intent.setData(Uri.parse("https://paypal.me/zcp0")); //为Intent设置DATA属性
+//            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -182,5 +211,79 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void onCityClick(View v){
+        currentTV=findViewById(R.id.tv_current);
+//        currentTV.setText(SharedPreferenceUtil.getCity(MainActivity.this));
+        CityPicker.from(MainActivity.this)
+                .enableAnimation(true)
+                .setAnimationStyle(R.style.DefaultCityPickerAnimation)
+                .setLocatedCity(null)
+               // .setHotCities(hotCities)
+                .setOnPickListener(new OnPickListener() {
+                    @Override
+                    public void onPick(int position, City data) {
+                        currentTV.setText(String.format("%s", data.getName()));
+                        SharedPreferenceUtil.saveCity(MainActivity.this,data.getName());
+                        Toast.makeText(
+                                getApplicationContext(),
+                                String.format("已选择：%s %s", data.getName(), data.getProvince()),
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText(getApplicationContext(), "取消选择", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onLocate() {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                aMapLocationClient=new AMapLocationClient(getApplicationContext());
+                                AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
+                                aMapLocationClient.setLocationListener(aMapLocationListener);
+                                mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+                                mLocationOption.setInterval(2000);
+                                aMapLocationClient.setLocationOption(mLocationOption);
+                                aMapLocationClient.startLocation();
+                            }
+                            AMapLocationListener aMapLocationListener=new AMapLocationListener() {
+                                @Override
+                                public void onLocationChanged(AMapLocation amapLocation) {
+                                    if (amapLocation != null) {
+                                        if (amapLocation.getErrorCode() == 0) {
+                                            StringBuilder cityBuilder=new StringBuilder(amapLocation.getCity());
+                                            StringBuilder provinceBuilder=new StringBuilder(amapLocation.getProvince());
+                                            CityPicker.from(MainActivity.this).locateComplete(
+                                                    new LocatedCity(cityBuilder.deleteCharAt(cityBuilder.length()-1).toString(),
+                                                            provinceBuilder.deleteCharAt(provinceBuilder.length()-1).toString(),
+                                                            amapLocation.getCityCode()), LocateState.SUCCESS);
+                                        } else {
+                                            CityPicker.from(MainActivity.this).locateComplete(
+                                                    new LocatedCity(null,null,null),LocateState.FAILURE);
+                                            //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                                            Log.e("this","location Error, ErrCode:"
+                                                    + amapLocation.getErrorCode() + ", errInfo:"
+                                                    + amapLocation.getErrorInfo());
+                                        }
+                                        aMapLocationClient.stopLocation();
+                                    }
+                                }
+                            };
+                        }, 1500);
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(aMapLocationClient != null){
+            aMapLocationClient.onDestroy();
+        }
     }
 }

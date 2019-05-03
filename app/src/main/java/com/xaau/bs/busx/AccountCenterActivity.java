@@ -53,7 +53,7 @@ public class AccountCenterActivity extends AppCompatActivity {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferenceUtil.saveMessage(AccountCenterActivity.this,"",false);
+                        SharedPreferenceUtil.saveUserMessage(AccountCenterActivity.this,"",false);
                         finish();
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -201,7 +201,7 @@ public class AccountCenterActivity extends AppCompatActivity {
             }else if (s.equals("change_password_failed")){
                 showToast("密码不正确");
                 initError();
-            }else return s.equals("change_password_success");
+            }else {return s.equals("change_password_success");}
             return false;
         }
 
@@ -222,7 +222,7 @@ public class AccountCenterActivity extends AppCompatActivity {
             super.onPostExecute(aBoolean);
             if (aBoolean){
                 showToast("密码修改成功");
-                SharedPreferenceUtil.saveMessage(AccountCenterActivity.this,"",false);
+                SharedPreferenceUtil.saveUserMessage(AccountCenterActivity.this,"",false);
                 finish();
             }
         }

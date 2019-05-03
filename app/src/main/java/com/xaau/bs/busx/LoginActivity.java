@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -340,7 +339,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }else if (s.equals("AccessDenied")){
                     showError();
                 }else if (s.equals("AccessConfirmed")){
-                    SharedPreferenceUtil.saveMessage(LoginActivity.this,mEmail,true);
+                    SharedPreferenceUtil.saveUserMessage(LoginActivity.this,mEmail,true);
                     return true;
                 }
             } catch (InterruptedException e) {

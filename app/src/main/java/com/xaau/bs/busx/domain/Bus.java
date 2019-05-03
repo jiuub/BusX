@@ -1,6 +1,5 @@
 package com.xaau.bs.busx.domain;
 
-import java.sql.Time;
 
 public class Bus {
     private int busID;

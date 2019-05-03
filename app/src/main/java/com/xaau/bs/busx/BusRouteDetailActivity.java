@@ -2,6 +2,7 @@ package com.xaau.bs.busx;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,8 +16,10 @@ import com.amap.api.maps.AMap.OnMapClickListener;
 import com.amap.api.maps.AMap.OnMapLoadedListener;
 import com.amap.api.maps.AMap.OnMarkerClickListener;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.route.BusPath;
 import com.amap.api.services.route.BusRouteResult;
 import com.xaau.bs.busx.adapter.BusSegmentListAdapter;
@@ -55,7 +58,8 @@ public class BusRouteDetailActivity extends Activity implements OnMapLoadedListe
 
 	private void init() {
 		if (aMap == null) {
-			aMap = mapView.getMap();	
+			aMap = mapView.getMap();
+			locDoc();
 		}
 		registerListener();
 		
@@ -112,6 +116,21 @@ public class BusRouteDetailActivity extends Activity implements OnMapLoadedListe
 			mBusrouteOverlay.addToMap();
 			mBusrouteOverlay.zoomToSpan();
 		}
+	}
+
+	//定位蓝点
+	private void locDoc(){
+		MyLocationStyle myLocationStyle=new MyLocationStyle();
+		// myLocationStyle.interval(5000);
+		myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.gps_point));
+		myLocationStyle.strokeWidth(5);
+		myLocationStyle.strokeColor(Color.argb(180, 3, 145, 255));
+		myLocationStyle.radiusFillColor(Color.argb(10, 0, 0, 180));
+		myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE_NO_CENTER);
+		aMap.setMyLocationStyle(myLocationStyle);
+		aMap.getUiSettings().setZoomControlsEnabled(false);
+		aMap.getUiSettings().setScaleControlsEnabled(true);
+		aMap.setMyLocationEnabled(true);
 	}
 
 	@Override

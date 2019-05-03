@@ -1,26 +1,32 @@
 package com.xaau.bs.busx.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xaau.bs.busx.R;
-import com.xaau.bs.busx.domain.Bus;
+import com.xaau.bs.busx.domain.Dessert;
 import com.xaau.bs.busx.domain.Station;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LineStationAdapter extends RecyclerView.Adapter<LineStationAdapter.ViewHolder> {
     private List<Station> list;
     private List bus;
+    private ArrayList<Dessert> items;
 
     public LineStationAdapter(List<Station> list , List bus) {
         this.list = list;
         this.bus = bus;
 
+    }
+    public LineStationAdapter(){
+        items = new ArrayList<Dessert>();
+        Dessert item = new Dessert("1".charAt(0),"站点信息","暂无");
+        items.add(item);
     }
 
     @Override
@@ -31,27 +37,26 @@ public class LineStationAdapter extends RecyclerView.Adapter<LineStationAdapter.
 
     @Override
     public void onBindViewHolder(LineStationAdapter.ViewHolder holder, int position) {
-        Station item = list.get(position);
-        holder.id.setText(String.valueOf(item.getSta_No()));
-        holder.title.setText(item.getSta_Name());
-       // Bus bus=this.bus.get(position);
-        holder.details.setText(bus.get(position).toString());
-//        while (bus.get(position)!=null||bus.get(position).get(position)!=null){
-//            Bus busItem= bus.get(position).get(position);
-//            holder.details.setText(busItem.getBusName());
-//        }
-//        List<Bus> busList=bus.get(position);
-//        Log.e("this",busList.toString());
-//        for (int i=0;i<busList.size();i++){
-//            Bus busItem= busList.get(i);
-//            holder.details.setText(busItem.getBusName());
-//            Log.e("this",busItem.getBusName()+i);
-//        }
+        if(list!=null&&!list.isEmpty()){
+            Station item = list.get(position);
+            holder.id.setText(String.valueOf(item.getSta_No()));
+            holder.title.setText(item.getSta_Name());
+            holder.details.setText(bus.get(position).toString());
+        }else {
+            Dessert item = items.get(position);
+            holder.id.setText(String.valueOf(item.getLetter()));
+            holder.title.setText(item.getName());
+            holder.details.setText(item.getDesc());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if (list!=null&&!list.isEmpty()){
+            return list.size();
+        }else {
+            return items.size();
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

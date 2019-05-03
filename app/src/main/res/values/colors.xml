@@ -8,6 +8,7 @@
     <color name="black">#000000</color>
     <color name="grey6">#666666</color>
     <color name="grey9">#999999</color>
+    <color name="dark">#EDEDED</color>
     <color name="phone_bg">#f6f6f6</color>
     <color name="transparent">#00000000</color>
     <color name="act_background">#EFEFEF</color>

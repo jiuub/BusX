@@ -6,7 +6,7 @@
     <string name="nav_header_subtitle">Developed by Eric</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="title_activity_route">规划</string>
-    <string name="action_settings">设置</string>
+    <string name="action_share">分享</string>
     <string name="action_search">搜索</string>
     <string name="title_activity_line">线路</string>
     <string name="large_text">关于</string>
@@ -38,4 +38,7 @@
     <string name="account">账号</string>
     <string name="sign_out">注销</string>
     <string name="error_invalid_new_password">新密码与旧密码不能相同</string>
+    <string name="action_pay">打赏</string>
+    <string name="alipay">支付宝</string>
+    <string name="paypal">PayPal</string>
 </resources>

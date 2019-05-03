@@ -7,15 +7,15 @@
         <item
             android:id="@+id/nav_stop"
             android:icon="@android:drawable/ic_search_category_default"
-            android:title="站点" />
+            android:title="公交站点" />
         <item
             android:id="@+id/nav_line"
             android:icon="@drawable/ic_menu_send"
-            android:title="线路" />
+            android:title="公交线路" />
         <item
             android:id="@+id/nav_route"
             android:icon="@android:drawable/ic_dialog_map"
-            android:title="导航" />
+            android:title="路径规划" />
     </group>
 
     <item android:title="更多">

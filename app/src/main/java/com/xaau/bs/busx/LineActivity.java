@@ -17,6 +17,7 @@ import com.xaau.bs.busx.adapter.LineStationAdapter;
 import com.xaau.bs.busx.domain.Station;
 import com.xaau.bs.busx.util.GsonTools;
 import com.xaau.bs.busx.util.HttpUtils;
+import com.xaau.bs.busx.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class LineActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
+    private RecyclerView recList ;
 
     private String direction="line_go";
     private String busname="";
@@ -36,7 +38,7 @@ public class LineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_line);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        recList = (RecyclerView) findViewById(R.id.station_view);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,8 +47,9 @@ public class LineActivity extends AppCompatActivity {
                     switch (direction.length()){
                         case 7:direction="line_back";break;
                         case 9:direction="line_go";break;
+                        default:
                     }
-                    getStation(direction,busname);
+                    getStation(direction,busname,SharedPreferenceUtil.getCity(LineActivity.this));
                 }
                 Log.e("this",direction);
             }
@@ -57,13 +60,15 @@ public class LineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_line, menu);
         MenuItem searchItem=menu.findItem(R.id.action_search);
-        SearchView searchView=(SearchView) MenuItemCompat.getActionView(searchItem);
+        final SearchView searchView=(SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.e("this", "TextSubmit : " + query);
+                getStation(direction,query,SharedPreferenceUtil.getCity(LineActivity.this));
+                recList.setVisibility(View.VISIBLE);
                 fab.setVisibility(View.VISIBLE);
-                getStation(direction,query);
+                searchView.clearFocus();
                 return false;
             }
 
@@ -82,7 +87,7 @@ public class LineActivity extends AppCompatActivity {
      * @param action_flag
      * @param busname
      */
-    private void getStation(final String action_flag, final String busname){
+    private void getStation(final String action_flag, final String busname, final String buscity){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -90,6 +95,7 @@ public class LineActivity extends AppCompatActivity {
                     Map<String,String> params=new HashMap<String, String>();
                     params.put("action_flag",action_flag);
                     params.put("busname",busname);
+                    params.put("buscity", buscity);
                     String s=HttpUtils.getJsonContent(params);
                     List<Station> lineStation=GsonTools.toList(s,Station.class);
                     List<List<Map<String,Object>>> lists=new ArrayList<List<Map<String, Object>>>();
@@ -100,7 +106,6 @@ public class LineActivity extends AppCompatActivity {
                         String s1=HttpUtils.getJsonContent(params);
                         lists.add(GsonTools.toListMaps(s1));
                     }
-                    Log.e("this",lists.toString());
                     showStation(lineStation,lists);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -117,12 +122,16 @@ public class LineActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RecyclerView recList = (RecyclerView) findViewById(R.id.station_view);
-                recList.setLayoutManager(new LinearLayoutManager(LineActivity.this, LinearLayoutManager.VERTICAL, false));
+              recList.setLayoutManager(new LinearLayoutManager(LineActivity.this, LinearLayoutManager.VERTICAL, false));
+              if (response!=null&&!response.isEmpty()){
                 LineStationAdapter lineStationAdapter=new LineStationAdapter(response,bus);
                 recList.setAdapter(lineStationAdapter);
                 Log.e("this",response.toString());
                 Log.e("this",bus.toString());
+              }else {
+                LineStationAdapter lineStationAdapter=new LineStationAdapter();
+                recList.setAdapter(lineStationAdapter);
+              }
             }
         });
     }

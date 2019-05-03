@@ -32,7 +32,7 @@
                 android:id="@+id/item_dessert_label_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="上"
+                android:text="name"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="下"
+                android:text="desc"
                 android:textAppearance="?android:textAppearanceSmall" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
